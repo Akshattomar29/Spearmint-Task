@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plot x and y with Chart.js</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <canvas id="myChart" width="400" height="400" res></canvas>
+
+    <script>
+        async function fetchData() {
+            const xResponse = await fetch("https://retoolapi.dev/gDa8uC/data");
+            const xData = await xResponse.json();
+
+            const yResponse = await fetch("https://retoolapi.dev/o5zMs5/data");
+            const yData = await yResponse.json();
+
+            // Extract first 50 values
+            const xValues = xData.slice(0, 50);
+            const yValues = yData.slice(0, 50);
+              console.log(xValues);
+            let arrlabelx= [];
+            let arrdx = [];
+
+            let arrlabely= [];
+            let arrdy = [];
+
+            xValues.forEach(element => {
+                arrlabelx.push(element.Label);
+                arrdx.push(element.RandomNumber);
+                
+            });
+
+            yValues.forEach((element)=> {
+                arrlabely.push(element.Label);
+                arrdy.push(element.RandomNumber);
+            })
+            console.log(arrlabelx);
+            console.log(arrdx);
+            // Plot the data
+            const ctx = document.getElementById('myChart').getContext('2d');
+            const myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: arrlabelx,
+                    datasets: [{
+                        label: 'x-axis',
+                        data: arrdx,
+                        backgroundColor: "green",
+                        borderColor: "",
+                        borderWidth: 3
+                        
+                    },{ label: 'y-axis',
+                        data: arrdy,
+                        backgroundColor: 'red',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 1}]
+                },
+              
+                options: {
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'x-axis'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'y-axis'
+                            }
+                        }
+
+                        
+                    }
+                }
+            });
+        }
+
+        fetchData();
+    </script>
+</body>
+</html>
